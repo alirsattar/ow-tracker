@@ -1,8 +1,9 @@
 <h1>{{title}}</h1>
-<br>
-<app-inputfields *ngFor="let bob of bobs"
-  [title]="bob.title"
-  [otherProp]="bob.otherProp">
-</app-inputfields>
+
+<div *ngIf="response">
+  <ul *ngFor="let row of response.values">
+    <li>{{ row.SR }} {{ row.date }} {{ row.time }} {{ row.diff }}</li>
+  </ul>
+</div>
 
 <router-outlet></router-outlet>

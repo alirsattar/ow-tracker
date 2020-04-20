@@ -1,33 +1,34 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { GoogleSheetsService } from './services/google-sheets.service';
+import { Pages } from './entities/pages.enum';
+import { DataRow } from './entities/DataRow.class';
+import { Observable } from 'rxjs';
+import { GoogleSheetsResponse } from './entities/GoogleSheetsResponse.class';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, OnChanges {
+export class AppComponent implements OnInit {
   title = 'OW SR Tracker';
+  response: GoogleSheetsResponse;
 
-  bobs: any = [
-    {
-      title: 'title 1',
-      otherProp: 'other prop 1'
-    },
-    {
-      title: 'title 2',
-      otherProp: 'other prop 2'
-    },
-    {
-      title: 'title 3',
-      otherProp: 'other prop 3'
-    }
-  ];
+  constructor(
+    private sheetsService: GoogleSheetsService
+  ) {
+    sheetsService.getSheet(Pages.dps)
+      .subscribe((info) => {
+        this.response = new GoogleSheetsResponse(info);
 
-  ngOnInit(){
-    console.log(this.bobs);
+        console.log(this.response);
+      },
+      (err) => {
+        console.error('ERROR in app.component: ', err);
+      }
+      );
   }
 
-  ngOnChanges(){
-    console.log('changed');
+  ngOnInit() {
   }
 }
